@@ -1,0 +1,99 @@
+{% block head %}
+<link href="../static/css/register.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="content-section">
+    <h2>註冊 Dcard</h2>
+    
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+            <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+                <button type="button" class="close-message" aria-label="關閉">&times;</button>
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post" class="form-container">
+        {% csrf_token %}
+        {% for field in registration_form %}
+            <div class="form-field">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                    <ul class="errorlist">
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit" name="register" class="btn-submit">註冊</button>
+    </form>
+    <p>已經有帳號？<a href="{% url 'login' %}">登入</a></p>
+</div>
+
+<!-- 新增 Toast 容器 -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="registerToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 處理消息關閉按鈕
+        document.querySelectorAll('.close-message').forEach(button => {
+            button.addEventListener('click', function() {
+                const messageElement = this.parentElement;
+                messageElement.style.opacity = '0';
+                setTimeout(() => {
+                    messageElement.style.display = 'none';
+                }, 300);
+            });
+        });
+
+        // 自動隱藏消息
+        const messages = document.querySelectorAll('.message');
+        if (messages.length > 0) {
+            setTimeout(() => {
+                messages.forEach(message => {
+                    message.style.opacity = '0';
+                    setTimeout(() => {
+                        message.style.display = 'none';
+                    }, 300);
+                });
+            }, 5000);
+        }
+
+        // 顯示 Toast 訊息函數
+        function showToast(message) {
+            const toastElement = document.getElementById('registerToast');
+            const toast = new bootstrap.Toast(toastElement, {
+                animation: true,
+                autohide: true,
+                delay: 3000
+            });
+            toastElement.querySelector('.toast-body').textContent = message;
+            toast.show();
+        }
+
+        // 如果有成功訊息，顯示 Toast
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                    showToast("{{ message }}");
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    });
+</script>
+
+{% endblock %}

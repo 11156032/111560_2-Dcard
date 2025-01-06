@@ -1,0 +1,43 @@
+/* Card 樣式 */
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.btn-primary {
+    align-self: flex-start;
+    margin-top: auto;
+}
+
+/* Modal 標題 */
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4682B4; /* 使用主題色 */
+}
+
+/* Modal 內容 */
+.modal-body {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* 文章資訊 */
+.modal-body p {
+    margin-bottom: 0.5rem;
+}
+
+/* 文章內容 */
+.modal-body h3 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #4682B4; /* 使用主題色 */
+    margin-bottom: 1rem;
+}
+
+/* 文字對齊 */
+.text-justify {
+    text-align: justify;
+}

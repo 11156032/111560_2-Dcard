@@ -1,0 +1,128 @@
+:root {
+    --primary-blue: #4682B4;
+    --hover-blue: #5A8F94;
+    --light-blue: #A3C9D5;
+    --white: #ffffff;
+}
+
+body {
+    background: linear-gradient(to bottom right, #4682B4, #5A8F94);
+    min-height: 100vh;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.sidebar {
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    min-height: 100vh;
+    padding: 1.5rem;
+}
+
+.sidebar h1 {
+    color: var(--white);
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+.list-group-item {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.list-group-item a {
+    color: var(--white);
+    text-decoration: none;
+    display: block;
+    padding: 0.75rem 1rem;
+}
+
+.list-group-item:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.main-content {
+    padding: 1.5rem;
+}
+
+.navbar-section {
+    background-color: var(--white);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-blue);
+}
+
+.content-section {
+    background-color: var(--white);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-home {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-home:hover {
+    background-color: var(--hover-blue);
+    color: var(--white);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 文章列表樣式 */
+.article-link {
+    display: block;
+    padding: 1rem;
+    margin-bottom: 0.8rem;
+    background-color: var(--white);
+    border-radius: 8px;
+    text-decoration: none;
+    color: #2c3e50;
+    transition: all 0.3s ease;
+    border: 1px solid #e9ecef;
+}
+
+.article-link:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-decoration: none;
+    color: #2c3e50;
+}
+
+.article-title {
+    color: #3498db;
+    font-size: 1.1rem;
+    margin: 0;
+    transition: color 0.3s ease;
+}
+
+.article-link:hover .article-title {
+    color: #2980b9;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        min-height: auto;
+        margin-bottom: 1.5rem;
+    }
+}

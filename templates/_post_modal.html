@@ -1,0 +1,259 @@
+<head>
+    <link href="../static/css/_post_modal.css" rel="stylesheet">
+<head>
+
+<!-- 文章模態視窗 -->
+<div class="modal fade" id="postModal{{ post.post_no }}" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ post.title }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- 文章資訊 -->
+                <div class="mb-4">
+                    <p><strong>分類：</strong>{{ post.category }}</p>
+                    <p><strong>作者：</strong>{{ post.author }}</p>
+                    <p><strong>發布日期：</strong>{{ post.pub_date }}</p>
+                </div>
+                <!-- 文章內容 -->
+                <div class="mb-4">
+                    <h3><strong>內容：</strong></h3>
+                    <p class="text-justify">{{ post.content }}</p>
+                </div>
+                <!-- 留言區 -->
+                <div class="comments-section">
+                    <h4>留言區</h4>
+                    <!-- 顯示留言 -->
+                    {% for comment in post.comments.all %}
+                    <div class="comment mb-3 p-3 bg-light rounded" id="comment-{{ comment.id }}">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <p><strong>{{ comment.user.username }}</strong> - {{ comment.created_at }}</p>
+                                <p id="comment-content-{{ comment.id }}">{{ comment.content }}</p>
+                            </div>
+                            {% if user == comment.user %}
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary" onclick="showEditModal({{ comment.id }}, '{{ comment.content }}')">編輯</button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteComment({{ comment.id }})">刪除</button>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    <!-- 留言表單 -->
+                    {% if user.is_authenticated %}
+                    <!-- 在 _post_modal.html 中修改留言表單 -->
+                    <form id="commentForm-{{ post.post_no }}" method="POST" action="{% url 'add_comment' post.post_no %}">
+                        {% csrf_token %}
+                        <textarea class="form-control" name="comment" rows="3" required></textarea>
+                        <button type="submit" class="btn btn-primary mt-2">發表留言</button>
+                    </form>
+                    {% else %}
+                    <div class="alert alert-info">
+                        請<a href="{% url 'login' %}">登入</a>後才能留言
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 編輯留言模態視窗 -->
+<div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">編輯留言</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editCommentForm">
+                    <input type="hidden" id="editMessageId" name="comment_id">
+                    <textarea class="form-control" id="editContent" name="content" rows="3"></textarea>
+                    <button type="submit" class="btn btn-primary">更新留言</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 刪除留言模態視窗 -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">刪除留言</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>確定要刪除此留言嗎？</p>
+                <form id="deleteCommentForm">
+                    <input type="hidden" id="deleteMessageId" name="comment_id">
+                    <button type="submit" class="btn btn-danger">刪除留言</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 新增 Toast 容器 -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="successToast" class="toast align-items-center text-white bg-success border-0">
+        <div class="d-flex">
+            <div class="toast-body"></div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 顯示 Toast 訊息
+    function showToast(message) {
+        const toastElement = document.getElementById('successToast');
+        const toast = new bootstrap.Toast(toastElement, { animation: true, autohide: true, delay: 3000 });
+        toastElement.querySelector('.toast-body').textContent = message;
+        toast.show();
+    }
+
+    // 編輯留言模態視窗顯示
+    function showEditModal(commentId, content) {
+        const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+        document.getElementById('editContent').value = content;
+        document.getElementById('editMessageId').value = commentId;
+        editModal.show();
+    }
+
+    // DOMContentLoaded 事件處理
+    document.addEventListener('DOMContentLoaded', function() {
+        // 為所有留言表單添加提交事件監聽器
+        document.querySelectorAll('[id^="commentForm-"]').forEach(form => {
+            form.addEventListener('submit', handleCommentSubmit);
+        });
+
+        // 編輯留言表單提交事件
+        document.getElementById('editCommentForm').addEventListener('submit', handleEditSubmit);
+
+        // 刪除留言表單提交事件
+        document.getElementById('deleteCommentForm').addEventListener('submit', handleDeleteSubmit);
+    });
+
+    // 處理留言提交
+    function handleCommentSubmit(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const postNo = this.id.split('-')[1];
+
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                addNewComment(this, data);
+                this.reset();
+                showToast('留言發表成功！');
+            } else {
+                showToast(data.error);
+            }
+        });
+    }
+
+    // 修改 addNewComment 函數
+    function addNewComment(form, data) {
+        const commentsSection = form.closest('.comments-section');
+        const newComment = `
+            <div class="comment mb-3 p-3 bg-light rounded" id="comment-${data.comment_id}">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p><strong>${data.username}</strong> - ${data.created_at}</p>
+                        <p id="comment-content-${data.comment_id}">${data.content}</p>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary" onclick="showEditModal(${data.comment_id}, '${data.content}')">編輯</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteComment(${data.comment_id})">刪除</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // 插入新留言到留言區的最上面
+        commentsSection.insertAdjacentHTML('afterbegin', newComment);
+    }
+
+    // 處理編輯提交
+    function handleEditSubmit(event) {
+        event.preventDefault();
+        const commentId = document.getElementById('editMessageId').value;
+        const newContent = document.getElementById('editContent').value;
+
+        fetch(`/update_comment/${commentId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: `content=${encodeURIComponent(newContent)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById(`comment-content-${commentId}`).textContent = newContent;
+                const editModal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
+                editModal.hide();
+                showToast('留言更新成功！');
+            } else {
+                showToast(data.error);
+            }
+        });
+    }
+
+    // 顯示刪除留言模態視窗
+    function deleteComment(commentId) {
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        document.getElementById('deleteMessageId').value = commentId;
+        deleteModal.show();
+    }
+
+    // 處理刪除提交
+    function handleDeleteSubmit(event) {
+        event.preventDefault();
+        const commentId = document.getElementById('deleteMessageId').value;
+
+        fetch(`/delete_comment/${commentId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById(`comment-${commentId}`).remove();
+                const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+                deleteModal.hide();
+                showToast('留言刪除成功！');
+            } else {
+                showToast(data.error);
+            }
+        });
+    }
+
+    // 取得 CSRF Token
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+</script>

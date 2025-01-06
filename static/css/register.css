@@ -1,0 +1,213 @@
+/* Main container styling */
+.content-section {
+    max-width: 480px;
+    margin: 40px auto;
+    padding: 32px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Header styling */
+.content-section h2 {
+    color: #006AA6;  /* Dcard blue color */
+    margin-bottom: 24px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* Form container */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Form fields */
+.form-container p {
+    margin: 0;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.form-container input:focus {
+    outline: none;
+    border-color: #006AA6;
+    box-shadow: 0 0 0 2px rgba(0, 106, 166, 0.1);
+}
+
+/* Labels */
+.form-container label {
+    display: block;
+    margin-bottom: 6px;
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Help text */
+.form-container .helptext {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* Error messages */
+.form-container .errorlist {
+    color: #dc3545;
+    font-size: 12px;
+    list-style: none;
+    padding: 0;
+    margin: 4px 0 0 0;
+}
+
+/* Submit button */
+.btn-submit {
+    background-color: #006AA6;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 8px;
+}
+
+.btn-submit:hover {
+    background-color: #005885;
+}
+
+/* Login link section */
+.content-section > p {
+    margin-top: 24px;
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+}
+
+.content-section a {
+    color: #006AA6;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.content-section a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive design */
+@media (max-width: 520px) {
+    .content-section {
+        margin: 20px;
+        padding: 24px;
+    }
+}
+
+/* Messages container */
+.messages-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 90%;
+    max-width: 400px;
+}
+
+/* Message styling */
+.message {
+    padding: 16px 40px 16px 20px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    position: relative;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* Success message */
+.message.success {
+    background: #E8F5E9;
+    color: #2E7D32;
+    border-left: 4px solid #2E7D32;
+}
+
+/* Error message */
+.message.error {
+    background: #FFEBEE;
+    color: #C62828;
+    border-left: 4px solid #C62828;
+}
+
+/* Close button */
+.close-message {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px 8px;
+    color: inherit;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.close-message:hover {
+    opacity: 1;
+}
+
+/* Form field error styles */
+.errorlist {
+    margin: 4px 0 0;
+    padding: 0;
+    list-style: none;
+    color: #C62828;
+    font-size: 12px;
+}
+
+.form-field {
+    margin-bottom: 16px;
+}
+
+/* Animation */
+@keyframes slideInDown {
+    from {
+        transform: translate(-50%, -100%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}
+
+.message {
+    animation: slideInDown 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .messages-container {
+        width: calc(100% - 40px);
+    }
+    
+    .message {
+        padding: 12px 35px 12px 15px;
+        font-size: 14px;
+    }
+}
