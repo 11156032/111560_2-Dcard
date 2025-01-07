@@ -1,11 +1,11 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
+from django.core.files.storage import FileSystemStorage
 from django.http import Http404, HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 import pytz
-from dcard.models import Post, Comment
+from dcard.models import Post, Comment, User  # 確保 User 模型在這裡
 from dcard.forms import UserRegistrationForm
-from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login
 
@@ -140,14 +140,23 @@ def delete_comment(request, comment_id):
 @login_required
 def user_profile(request, username):
     user = get_object_or_404(User, username=username)
+
+    if request.method == 'POST' and request.FILES.get('profile_picture'):
+        profile_picture = request.FILES['profile_picture']
+        fs = FileSystemStorage()
+        filename = fs.save(profile_picture.name, profile_picture)
+        user.profile_picture = filename  # 假設 User 模型有 profile_picture 欄位
+        user.save()
+        messages.success(request, '個人頭貼已更新！')
+        return redirect('user_profile', username=username)
+
     context = {
         'user': user,
-        'email':user.email,
+        'email': user.email,
         'join_date': user.date_joined,
         'last_login': user.last_login
     }
     return render(request, 'user_profile.html', context)
-
 from django.contrib.auth import logout as auth_logout
 
 def logout_view(request):

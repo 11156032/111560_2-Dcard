@@ -44,6 +44,16 @@
                         <p class="text-gray-700">最後登入：<span class="text-blue-600">{{ last_login|date:"Y/m/d H:i" }}</span></p>
                     </div>
                 </div>
+
+                <!-- 上傳個人頭貼的表單 -->
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="flex flex-col items-center space-y-2">
+                        <label class="text-gray-700">上傳個人頭貼：</label>
+                        <input type="file" name="profile_picture" accept="image/*" class="border border-gray-300 rounded p-2">
+                        <button type="submit" class="bg-blue-500 text-white rounded p-2">更新頭貼</button>
+                    </div>
+                </form>
             </div>
         </div>
     </body>
