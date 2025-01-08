@@ -1,0 +1,67 @@
+/* 關閉按鈕樣式 */
+.btn-secondary {
+    color: #fff; /* 白色文字 */
+    background-color: #6c757d; /* 灰色背景 */
+    border-color: #6c757d; /* 灰色邊框 */
+    padding: 8px 24px; /* 按鈕的內邊距 */
+    font-size: 17px; /* 字體大小 */
+    border-radius: 4px; /* 圓角 */
+  }
+  
+  /* Hover 狀態 */
+  .btn-secondary:hover {
+    color: #fff;
+    background-color: #5c636a; /* 較深的灰色 */
+    border-color: #565e64; /* 較深的灰色 */
+  }
+  
+  /* 聚焦狀態 */
+  .btn-secondary:focus, .btn-secondary.focus {
+    color: #fff;
+    background-color: #5c636a;
+    border-color: #565e64;
+    box-shadow: 0 0 0 0.25rem rgba(130,138,145,0.5); /* 聚焦效果陰影 */
+  }
+  
+  /* 禁用狀態 */
+  .btn-secondary:disabled, .btn-secondary.disabled {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+    opacity: 0.65; /* 半透明效果 */
+  }
+  
+  /* Active 狀態 */
+  .btn-secondary:not(:disabled):not(.disabled):active,
+  .btn-secondary:not(:disabled):not(.disabled).active,
+  .show > .btn-secondary.dropdown-toggle {
+    color: #fff;
+    background-color: #545b62; /* 更深的灰色 */
+    border-color: #4e555b; /* 更深的灰色 */
+  }
+  
+  .btn-secondary:not(:disabled):not(.disabled):active:focus,
+  .btn-secondary:not(:disabled):not(.disabled).active:focus,
+  .show > .btn-secondary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.25rem rgba(130,138,145,0.5);
+  }
+  
+  /* 按鈕容器樣式 */
+.button-container {
+    display: flex;
+    padding: 0 20px; /* 調整容器左右間距 */
+    width: 650px;
+    justify-content: space-between; /* 添加 space-between 分布方式 */
+}
+
+/* 更新頭貼按鈕居中 */
+.button-container .btn-primary {
+    margin-left: 260px;
+}
+
+/* 關閉按鈕靠右 */
+.button-container .btn-secondary {
+    margin-left: auto; /* 将「關閉」按钮推到最右 */
+}
+
+  
