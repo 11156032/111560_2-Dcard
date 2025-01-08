@@ -51,12 +51,22 @@
                         <input type="file" name="profile_picture" accept="image/*" class="border border-gray-300 rounded p-2">
                         <div class="button-container">
                             <button type="submit" class="btn btn-primary bg-blue-500 text-white rounded p-2">更新頭貼</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                            <button type="button" class="btn btn-secondary close-message">關閉</button>
                         </div>                          
                     </div>
                 </form>
-                
             </div>
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // 處理「關閉」按鈕
+                document.querySelectorAll('.close-message').forEach(button => {
+                    button.addEventListener('click', function() {
+                        history.back(); // 回上一頁
+                    });
+                });
+            });
+        </script>
     </body>
 </html>
