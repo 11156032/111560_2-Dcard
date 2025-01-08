@@ -1,12 +1,12 @@
 :root {
-    --primary-blue: #4682B4;
-    --hover-blue: #5A8F94;
+    --primary-blue: #7272d6;
+    --hover-blue: #6c60e7;
     --light-blue: #A3C9D5;
     --white: #ffffff;
 }
 
 body {
-    background: linear-gradient(to bottom right, #4682B4, #5A8F94);
+    background: linear-gradient(to bottom right, #442fbc, #96e1ff);
     min-height: 100vh;
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
@@ -107,6 +107,10 @@ body {
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     text-decoration: none;
     color: #2c3e50;
+}
+
+.navbar-brand:hover{
+    color: var(--primary-blue);
 }
 
 .article-title {

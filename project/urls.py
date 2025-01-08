@@ -18,6 +18,8 @@ from dcard.views import homepage, logout_view, post_detail, register, update_com
 from django.contrib import admin
 from django.urls import path
 from django.views.generic import RedirectView
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path("", RedirectView.as_view(url="/0/", permanent=False)),
@@ -31,4 +33,4 @@ urlpatterns = [
     path('user/<str:username>/', user_profile, name='user_profile'),
     path('logout/', logout_view, name='logout'),
     path('<slug:slug>/', homepage),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

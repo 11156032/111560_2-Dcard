@@ -8,6 +8,7 @@ from dcard.models import Post, Comment, User  # 確保 User 模型在這裡
 from dcard.forms import UserRegistrationForm
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login
+from dcard.models import UserProfile
 
 def homepage(request, slug):
     if not Post.objects.filter(topic_no=slug).exists() and slug != "0":
@@ -140,13 +141,12 @@ def delete_comment(request, comment_id):
 @login_required
 def user_profile(request, username):
     user = get_object_or_404(User, username=username)
+    user_profile = UserProfile.objects.get(user = user)
 
     if request.method == 'POST' and request.FILES.get('profile_picture'):
         profile_picture = request.FILES['profile_picture']
-        fs = FileSystemStorage()
-        filename = fs.save(profile_picture.name, profile_picture)
-        user.profile_picture = filename  # 假設 User 模型有 profile_picture 欄位
-        user.save()
+        user_profile.avatar = profile_picture
+        user_profile.save()
         messages.success(request, '個人頭貼已更新！')
         return redirect('user_profile', username=username)
 
@@ -154,7 +154,8 @@ def user_profile(request, username):
         'user': user,
         'email': user.email,
         'join_date': user.date_joined,
-        'last_login': user.last_login
+        'last_login': user.last_login,
+        'profile_picture': user_profile.avatar.url
     }
     return render(request, 'user_profile.html', context)
 from django.contrib.auth import logout as auth_logout
